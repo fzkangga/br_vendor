@@ -5,6 +5,7 @@
 # Copyright (C) 2018 Mohd Faraz <mohd.faraz.abc@gmail.com>
 # Copyright (C) 2018 Sipun Ku Mahanta <sipunkumar85@gmail.com>
 # Copyright (C) 2018 Sweeto143@github / Darkstar085@XDA
+# Copyright (C) 2018 hifzhan41@github / hifzhan41@XDA
 
 
 # Custom build script
@@ -40,6 +41,7 @@ CLR_BLD_CYA=$CLR_RST$CLR_BLD$(tput setaf 6) #  cyan, bold
 
 BUILD_START=$(date +"%s")
 DATE=$(date -u +%Y%m%d-%H%M)
+VERSION=B-v1.1
 BR_VENDOR=vendor/batik
 BR_WORK=$OUT
 BR_WORK_DIR=$OUT/zip
@@ -100,18 +102,18 @@ zip -r ${ZIP_NAME}.zip *
 BUILD_RESULT_STRING="BUILD SUCCESSFUL"
 echo -e "${CLR_BLD_PPL}- Compressing Zip Done...${CLR_RST}"
 echo -e ""
-echo -e "${CLR_BLD_YLW}     		██████╗  █████╗ ██████╗ ██╗  ██╗${CLR_RST}"
-echo -e "${CLR_BLD_CYA}     		██╔══██╗██╔══██╗██╔══██╗██║ ██╔╝${CLR_RST}"
-echo -e "${CLR_BLD_PPL}     		██║  ██║███████║██████╔╝█████╔╝ ${CLR_RST}"
-echo -e "${CLR_BLD_GRN}     		██║  ██║██╔══██║██╔══██╗██╔═██╗ ${CLR_RST}"
-echo -e "${CLR_BLD_BLU}     		██████╔╝██║  ██║██║  ██║██║  ██╗${CLR_RST}"
-echo -e "${CLR_BLD_RED}     		╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝${CLR_RST}"
-echo -e "${CLR_BLD_RED}██████╗ ███████╗ ██████╗ ██████╗ ██╗   ██╗███████╗██████╗ ██╗   ██╗${CLR_RST}"
-echo -e "${CLR_BLD_BLU}██╔══██╗██╔════╝██╔════╝██╔═══██╗██║   ██║██╔════╝██╔══██╗╚██╗ ██╔╝${CLR_RST}"
-echo -e "${CLR_BLD_GRN}██████╔╝█████╗  ██║     ██║   ██║██║   ██║█████╗  ██████╔╝ ╚████╔╝ ${CLR_RST}"
-echo -e "${CLR_BLD_PPL}██╔══██╗██╔══╝  ██║     ██║   ██║╚██╗ ██╔╝██╔══╝  ██╔══██╗  ╚██╔╝  ${CLR_RST}"
-echo -e "${CLR_BLD_CYA}██║  ██║███████╗╚██████╗╚██████╔╝ ╚████╔╝ ███████╗██║  ██║   ██║   ${CLR_RST}"
-echo -e "${CLR_BLD_YLW}╚═╝  ╚═╝╚══════╝ ╚═════╝ ╚═════╝   ╚═══╝  ╚══════╝╚═╝  ╚═╝   ╚═╝   ${CLR_RST}"
+echo -e "${CLR_BLD_YLW}		██████╗   █████╗  ████████╗ ██╗ ██╗  ██╗${CLR_RST}" 
+echo -e "${CLR_BLD_CYA}		██╔══██╗ ██╔══██╗ ╚══██╔══╝ ██║ ██║ ██╔╝${CLR_RST}" 
+echo -e "${CLR_BLD_PPL}		██████╔╝ ███████║    ██║    ██║ █████╔╝ ${CLR_RST}" 
+echo -e "${CLR_BLD_GRN}		██╔══██╗ ██╔══██║    ██║    ██║ ██╔═██╗ ${CLR_RST}" 
+echo -e "${CLR_BLD_BLU}		██████╔╝ ██║  ██║    ██║    ██║ ██║  ██╗ ${CLR_RST}"
+echo -e "${CLR_BLD_RED}		╚═════╝  ╚═╝  ╚═╝    ╚═╝    ╚═╝ ╚═╝  ╚═╝ ${CLR_RST}"
+echo -e "${CLR_BLD_RED} ██████╗  ███████╗  ██████╗  ██████╗  ██╗   ██╗ ███████╗ ██████╗  ██╗   ██╗ ${CLR_RST}"
+echo -e "${CLR_BLD_BLU} ██╔══██╗ ██╔════╝ ██╔════╝ ██╔═══██╗ ██║   ██║ ██╔════╝ ██╔══██╗ ╚██╗ ██╔╝ ${CLR_RST}"
+echo -e "${CLR_BLD_GRN} ██████╔╝ █████╗   ██║      ██║   ██║ ██║   ██║ █████╗   ██████╔╝  ╚████╔╝  ${CLR_RST}"
+echo -e "${CLR_BLD_PPL} ██╔══██╗ ██╔══╝   ██║      ██║   ██║ ╚██╗ ██╔╝ ██╔══╝   ██╔══██╗   ╚██╔╝   ${CLR_RST}"
+echo -e "${CLR_BLD_CYA} ██║  ██║ ███████╗ ╚██████╗ ╚██████╔╝  ╚████╔╝  ███████╗ ██║  ██║    ██║    ${CLR_RST}"
+echo -e "${CLR_BLD_YLW} ╚═╝  ╚═╝ ╚══════╝  ╚═════╝  ╚═════╝    ╚═══╝   ╚══════╝ ╚═╝  ╚═╝    ╚═╝    ${CLR_RST}"
 echo -e ""
 BUILD_END=$(date +"%s")
 DIFF=$(($BUILD_END - $BUILD_START))
