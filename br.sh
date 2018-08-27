@@ -1,6 +1,6 @@
 #!/bin/bash
 # Copyright (C) 2015 Paranoid Android Project
-# Copyright (C) 2018 ATG BRoid
+# Copyright (C) 2018 ATG Droid
 # Copyright (C) 2018 PitchBlackTWRP <pitchblacktwrp@gmail.com>
 # Copyright (C) 2018 Mohd Faraz <mohd.faraz.abc@gmail.com>
 # Copyright (C) 2018 Sipun Ku Mahanta <sipunkumar85@gmail.com>
@@ -41,7 +41,7 @@ CLR_BLD_CYA=$CLR_RST$CLR_BLD$(tput setaf 6) #  cyan, bold
 
 BUILD_START=$(date +"%s")
 DATE=$(date -u +%Y%m%d-%H%M)
-VERSION=B-v1.1
+VERSION=B-v1.2
 BR_VENDOR=vendor/batik
 BR_WORK=$OUT
 BR_WORK_DIR=$OUT/zip
