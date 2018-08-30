@@ -41,7 +41,7 @@ CLR_BLD_CYA=$CLR_RST$CLR_BLD$(tput setaf 6) #  cyan, bold
 
 BUILD_START=$(date +"%s")
 DATE=$(date -u +%Y%m%d-%H%M)
-VERSION=B-v1.2
+VERSION=B-1.2
 BR_VENDOR=vendor/batik
 BR_WORK=$OUT
 BR_WORK_DIR=$OUT/zip
@@ -67,9 +67,9 @@ if [ "$BRTWRP_BUILD_TYPE" ]; then
 fi
 
 if [ "$BRTWRP_BUILD_TYPE" == "OFFICIAL" ]; then
-	ZIP_NAME=BatikRecovery-$DEVICE-$VERSION-$DATE-OFFICIAL
+	ZIP_NAME=BR-$DEVICE-$VERSION-$DATE-OFFICIAL
 else
-	ZIP_NAME=BatikRecovery-$DEVICE-$VERSION-$DATE-UNOFFICIAL
+	ZIP_NAME=BR-$DEVICE-$VERSION-$DATE-UNOFFICIAL
 fi
 
 echo -e "${CLR_BLD_RED}**** Making Zip ****${CLR_RST}"
