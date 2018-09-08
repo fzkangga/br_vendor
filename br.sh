@@ -56,7 +56,7 @@ else
 fi
 
 function search() {
-for d in $(https://raw.githubusercontent.com/BatikRecovery/br_vendor/br/br.devices -O br.devices); do
+for d in $(curl -s https://raw.githubusercontent.com/BatikRecovery/br_vendor/br/br.devices); do
 if [ "$d" == "$BR_DEVICE" ]; then
 echo "$d";
 break;
