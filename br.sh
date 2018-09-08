@@ -49,28 +49,33 @@ DEVICE=$(cut -d'_' -f2 <<<$TARGET_PRODUCT)
 RECOVERY_IMG=$OUT/recovery.img
 BR_DEVICE=$TARGET_VENDOR_DEVICE_NAME-$(cut -d'_' -f2 <<<$TARGET_PRODUCT)
 ZIP_NAME=BatikRecovery-$DEVICE-$VERSION-$DATE
-BRTWRP_BUILD_TYPE=UNOFFICIAL
-wget https://raw.githubusercontent.com/BatikRecovery/br_vendor/br/br.devices -O br.devices
-
-if [ "$BRTWRP_BUILD_TYPE" ]; then
-   CURRENT_DEVICE=$(cut -d'_' -f2 <<<$TARGET_PRODUCT)
-   LIST=br.devices
-   FOUND_DEVICE=$(grep -Fx "$CURRENT_DEVICE" "$LIST")
-    if [ "$FOUND_DEVICE" == "$CURRENT_DEVICE" ]; then
-      IS_OFFICIAL=true
-      BRTWRP_BUILD_TYPE=OFFICIAL
-    fi
-    if [ ! "$IS_OFFICIAL" == "true" ]; then
-       BRTWRP_BUILD_TYPE=UNOFFICIAL
-       echo "Error Device is not OFFICIAL"
-    fi
-fi
-
-if [ "$BRTWRP_BUILD_TYPE" == "OFFICIAL" ]; then
-	ZIP_NAME=BR-$DEVICE-$VERSION-$DATE-OFFICIAL
+if [ "$BR_OFFICIAL_CH" != "true" ]; then
+	BR_BUILD_TYPE=UNOFFICIAL
 else
-	ZIP_NAME=BR-$DEVICE-$VERSION-$DATE-UNOFFICIAL
+	BR_BUILD_TYPE=OFFICIAL
 fi
+
+function search() {
+for d in $(https://raw.githubusercontent.com/BatikRecovery/br_vendor/br/br.devices -O br.devices); do
+if [ "$d" == "$BR_DEVICE" ]; then
+echo "$d";
+break;
+fi
+done
+}
+
+if [ "$BR_BUILD_TYPE" != "UNOFFICIAL" ]; then
+	F=$(search);
+	if [[ "${F}" ]]; then
+		BR_BUILD_TYPE=OFFICIAL
+	else
+		BR_BUILD_TYPE=UNOFFICIAL
+		echo -e "${red}Error Device is not OFFICIAL${nocol}"
+		exit 1;
+	fi
+fi
+
+ZIP_NAME=BR-$BR_DEVICE-$VERSION-$DATE-$BR_BUILD_TYPE
 
 echo -e "${CLR_BLD_RED}**** Making Zip ****${CLR_RST}"
 if [ -d "$BR_WORK_DIR" ]; then
