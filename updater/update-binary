@@ -145,8 +145,6 @@ fi
 	rm -rf $BR2_PATH
 	rm -rf $BR3_PATH
 	rm -rf $BR4_PATH
-	rm $UI
-	rm -rf $RES
 
 #Flashing
 if [ "$DD" ]; then
