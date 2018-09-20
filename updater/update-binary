@@ -147,7 +147,6 @@ fi
 	rm -rf $BR4_PATH
 	rm $UI
 	rm -rf $RES
-	rm -rf $OLD
 
 #Flashing
 if [ "$DD" ]; then
