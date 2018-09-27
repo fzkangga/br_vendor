@@ -69,7 +69,7 @@ if [ "$BR_BUILD_TYPE" != "UNOFFICIAL" ]; then
 		BR_BUILD_TYPE=OFFICIAL
 	else
 		BR_BUILD_TYPE=UNOFFICIAL
-		echo -e "${red}Error Device is not OFFICIAL${nocol}"
+		echo -e "${red}Error Device is not OFFICIAL${CLR_RST}"
 		exit 1;
 	fi
 fi
