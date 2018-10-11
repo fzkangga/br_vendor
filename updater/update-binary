@@ -64,10 +64,10 @@ ui_print "|---------------------------------------------|";
 BR=/tmp/batik/Batik
 IMG=/tmp/batik/TWRP/recovery.img
 ETC=/system/etc/install-recovery.sh
-BR1_PATH=/sdcard/batik/tools1
-BR2_PATH=/sdcard/batik/tools2
-BR3_PATH=/sdcard/TWRP/tools1
-BR4_PATH=/sdcard/TWRP/tools2
+BR1_PATH=/sdcard/batik/tools
+BR2_PATH=/sdcard/batik/tools1
+BR3_PATH=/sdcard/batik/tools2
+BR4_PATH=/sdcard/TWRP/tools
 RES=/sdcard/batik/
 OLD=/sdcard/TWRP/
 red='\033[0;31m'
@@ -168,12 +168,10 @@ fi
 
 #Copy Specific Files
 if [ -f "/sdcard/batik" ]; then
-cp -r $BR/tools1 /sdcard/batik/
-cp -r $BR/tools2 /sdcard/batik/
+cp -r $BR/tools /sdcard/batik/
 else
 mkdir -p /sdcard/batik
-cp -r $BR/tools1 /sdcard/batik/
-cp -r $BR/tools2 /sdcard/batik/
+cp -r $BR/tools /sdcard/batik/
 fi
 
 ui_print "|---------------------------------------------|";
