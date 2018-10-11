@@ -65,7 +65,9 @@ BR=/tmp/batik/Batik
 IMG=/tmp/batik/TWRP/recovery.img
 ETC=/system/etc/install-recovery.sh
 BR1_PATH=/sdcard/batik/tools
-BR2_PATH=/sdcard/TWRP/tools
+BR2_PATH=/sdcard/batik/tools1
+BR3_PATH=/sdcard/batik/tools2
+BR4_PATH=/sdcard/TWRP/tools
 RES=/sdcard/batik/
 OLD=/sdcard/TWRP/
 red='\033[0;31m'
@@ -141,6 +143,8 @@ fi
 	rm $ETC
 	rm -rf $BR1_PATH
 	rm -rf $BR2_PATH
+	rm -rf $BR3_PATH
+	rm -rf $BR4_PATH
 
 #Flashing
 if [ "$DD" ]; then
