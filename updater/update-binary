@@ -177,9 +177,7 @@ fi
 ui_print "|---------------------------------------------|";
 ui_print "|---------------------------------------------|";
 ui_print "|                  THANK YOU                  |";
-ui_print "|        REBOOTING INTO BATIK RECOVERY        |";
+ui_print "|      REBOOT MANUAL INTO BATIK RECOVERY      |";
 ui_print "|---------------------------------------------|";
-sleep 5s
-show_progress 0.1000000, 90 ;
 ui_print "|------------INSTALLATION FINISHED!-----------|";
 /sbin/unmount /system;
