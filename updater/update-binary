@@ -124,6 +124,12 @@ recovery_partition() {
 		# device fstab v1
 		RECOVERY=$(awk '$1 == "/recovery" {print $3}' "$fstab")
 		[ "$RECOVERY" ] && chk_syml && return
+		# device fstab v2
+		RECOVERY=$(awk '$2 == "/FOTAKernel" {print $1}' "$fstab")
+		[ "$RECOVERY" ] && chk_syml && return
+		# device fstab v1
+		RECOVERY=$(awk '$1 == "/FOTAKernel" {print $3}' "$fstab")
+		[ "$RECOVERY" ] && chk_syml && return
 	done
 	if [ -f /proc/emmc ]; then
 		# emmc layout
