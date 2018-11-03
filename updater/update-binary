@@ -109,6 +109,12 @@ recovery_partition() {
 		# recovery fstab v2
 		RECOVERY=$(awk '$2 == "/recovery" {print $1}' /etc/recovery.fstab)
 		[ "$RECOVERY" ] && chk_syml && return
+		# recovery fstab v1
+		RECOVERY=$(awk '$1 == "/FOTAKernel" {print $1}' /etc/recovery.fstab)
+		[ "$RECOVERY" ] && chk_syml && return
+		# recovery fstab v2
+		RECOVERY=$(awk '$2 == "/FOTAKernel" {print $1}' /etc/recovery.fstab)
+		[ "$RECOVERY" ] && chk_syml && return
 	fi
 	for fstab in /fstab.*; do
 		[ -f "$fstab" ] || continue
@@ -173,7 +179,6 @@ else
 mkdir -p /sdcard/batik
 cp -r $BR/tools /sdcard/batik/
 fi
-
 ui_print "|---------------------------------------------|";
 ui_print "|---------------------------------------------|";
 ui_print "|                  THANK YOU                  |";
