@@ -145,6 +145,7 @@ recovery_partition() {
 		# mtk layout
 		RECOVERY=$(awk '$1 == "/recovery" {print $5}' /proc/dumchar_info)
 		[ "$RECOVERY" ] && chk_syml && return
+	fi
 	if [ -f /proc/emmc ]; then
 		# emmc layout
 		RECOVERY=$(awk '$4 == "\"FOTAKernel\"" {print $1}' /proc/emmc)
