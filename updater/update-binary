@@ -161,7 +161,7 @@ recovery_partition() {
 		RECOVERY=$(awk '$1 == "/FOTAKernel" {print $5}' /proc/dumchar_info)
 		[ "$RECOVERY" ] && chk_syml && return
 	fi
-		if [ -h /dev/block/bootdevice/by-name/FOTAKernel ]; then
+	if [ -h /dev/block/bootdevice/by-name/FOTAKernel ]; then
 		#kitakami
 		RECOVERY=/dev/block/bootdevice/by-name/FOTAKernel
 		[ "$RECOVERY" ] && chk_syml && return
