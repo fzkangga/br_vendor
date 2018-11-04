@@ -108,7 +108,7 @@ recovery_partition() {
 		RECOVERY=$(awk '$2 == "/recovery" {print $1}' /etc/recovery.fstab)
 		[ "$RECOVERY" ] && chk_syml && return
 		# recovery fstab v1
-		RECOVERY=$(awk '$1 == "/FOTAKernel" {print $1}' /etc/recovery.fstab)
+		RECOVERY=$(awk '$1 == "/FOTAKernel" {print $3}' /etc/recovery.fstab)
 		[ "$RECOVERY" ] && chk_syml && return
 		# recovery fstab v2
 		RECOVERY=$(awk '$2 == "/FOTAKernel" {print $1}' /etc/recovery.fstab)
@@ -123,7 +123,7 @@ recovery_partition() {
 		RECOVERY=$(awk '$1 == "/recovery" {print $3}' "$fstab")
 		[ "$RECOVERY" ] && chk_syml && return
 		# device fstab v2
-		RECOVERY=$(awk '$2 == "/FOTAKernel" {print $1}' "$fstab")
+		RECOVERY=$(awk '$2 == "/FOTAKernel" {print $}' "$fstab")
 		[ "$RECOVERY" ] && chk_syml && return
 		# device fstab v1
 		RECOVERY=$(awk '$1 == "/FOTAKernel" {print $3}' "$fstab")
