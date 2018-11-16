@@ -124,12 +124,6 @@ recovery_partition() {
 		# device fstab v1
 		RECOVERY=$(awk '$1 == "/recovery" {print $3}' "$fstab")
 		[ "$RECOVERY" ] && chk_syml && return
-		# device fstab v2
-		RECOVERY=$(awk '$2 == "/FOTAKernel" {print $1}' "$fstab")
-		[ "$RECOVERY" ] && chk_syml && return
-		# device fstab v1
-		RECOVERY=$(awk '$1 == "/FOTAKernel" {print $3}' "$fstab")
-		[ "$RECOVERY" ] && chk_syml && return
 	done
 	if [ -f /proc/emmc ]; then
 		# emmc layout
@@ -146,24 +140,14 @@ recovery_partition() {
 		RECOVERY=$(awk '$1 == "/recovery" {print $5}' /proc/dumchar_info)
 		[ "$RECOVERY" ] && chk_syml && return
 	fi
-	if [ -f /proc/emmc ]; then
-		# emmc layout
-		RECOVERY=$(awk '$4 == "\"FOTAKernel\"" {print $1}' /proc/emmc)
-		[ "$RECOVERY" ] && RECOVERY=/dev/block/$(echo "$RECOVERY" | cut -f1 -d:) && chk_syml && return
-	fi
-	if [ -f /proc/mtd ]; then
-		# mtd layout
-		RECOVERY=$(awk '$4 == "\"FOTAKernel\"" {print $1}' /proc/mtd)
-		[ "$RECOVERY" ] && RECOVERY=/dev/block/$(echo "$RECOVERY" | cut -f1 -d:) && chk_syml && return
-	fi
-	if [ -f /proc/dumchar_info ]; then
-		# mtk layout
-		RECOVERY=$(awk '$1 == "/FOTAKernel" {print $5}' /proc/dumchar_info)
-		[ "$RECOVERY" ] && chk_syml && return
-	fi
 	if [ -h /dev/block/bootdevice/by-name/FOTAKernel ]; then
 		#kitakami
 		RECOVERY=/dev/block/bootdevice/by-name/FOTAKernel
+		[ "$RECOVERY" ] && chk_syml && return
+	fi
+	if [ -h /dev/block/bootdevice/by-name/recovery ]; then
+		#leeco
+		RECOVERY=/dev/block/bootdevice/by-name/recovery
 		[ "$RECOVERY" ] && chk_syml && return
 	fi
 	abort "Failed to Find RECOVERY Partition";
