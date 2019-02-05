@@ -47,6 +47,7 @@ BR_WORK=$OUT
 BR_WORK_DIR=$OUT/zip
 RECOVERY_IMG=$OUT/recovery.img
 RECOVERY_RAM=$OUT/ramdisk-recovery.cpio
+AB_OTA_UPDATER=$AB_OTA_UPDATER
 BR_DEVICE=$(cut -d'_' -f2-3 <<<$TARGET_PRODUCT)
 
 if [ "$BR_OFFICIAL_CH" != "true" ]; then
