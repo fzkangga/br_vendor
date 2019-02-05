@@ -1,5 +1,5 @@
 #!/sbin/sh
-# Copyright (C) 2018 ATG Droid 
+# Copyright (C) 2018 ATG Droid
 # Copyright (C) 2018 PitchBlack Recovery <pitchblackrecovery@gmail.com>
 # Copyright (C) 2018 Batik Recovery <hifzhan41@gmail.com>
 #
@@ -72,11 +72,10 @@ RES=/sdcard/batik/
 OLD=/sdcard/TWRP/
 red='\033[0;31m'
 RECOVERY=/dev/recovery
+cp META-INF/awk /sbin/awk
+chmod 0755 /sbin/awk
 
-if [ -f "$(readlink -f "$RECOVERY")" ]; then
-	DD=true
-	break
-elif [[ ! -f "$(readlink -f "$RECOVERY")" ] || [ -f "$RECOVERY" ]]; then
+if [ -f "$RECOVERY" ]; then
 	DD=false
 	break
 else

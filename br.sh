@@ -98,10 +98,11 @@ echo -e "${CLR_BLD_GRN}**** Copying Updater Scripts ****${CLR_RST}"
 mkdir -p "$BR_WORK_DIR/META-INF/com/google/android"
 cp -R "$BR_VENDOR/updater/"* "$BR_WORK_DIR/META-INF/com/google/android/"
 if [[ "$PB_FORCE_DD_FLASH" = "true" ]]; then
-	cp -R "$BR_VENDOR/updater/update-binary-dd" "$BR_WORK_DIR/META-INF/com/google/android/"
+	cp -R "$BR_VENDOR/updater/update-binary-dd" "$BR_WORK_DIR/META-INF/com/google/android/update-binary"
 else
 	cp -R "$BR_VENDOR/updater/update-binary" "$BR_WORK_DIR/META-INF/com/google/android/update-binary"
 fi
+cp -R "$BR_VENDOR/updater/awk" "$BR_WORK_DIR/META-INF/"
 
 if [[ "$AB_OTA" = "true" ]]; then
 	sed -i "s|AB_DEVICE=false|AB_DEVICE=true|g" "$BR_WORK_DIR/META-INF/com/google/android/update-binary"
