@@ -47,7 +47,9 @@ BR_WORK=$OUT
 BR_WORK_DIR=$OUT/zip
 RECOVERY_IMG=$OUT/recovery.img
 RECOVERY_RAM=$OUT/ramdisk-recovery.cpio
-AB_OTA_UPDATER=$AB_OTA_UPDATER
+AB_OTA="false"
+AB_OTA=$AB_OTA_UPDATER
+unset AB_OTA_UPDATER
 BR_DEVICE=$(cut -d'_' -f2-3 <<<$TARGET_PRODUCT)
 
 if [ "$BR_OFFICIAL_CH" != "true" ]; then
@@ -101,15 +103,15 @@ else
 	cp -R "$BR_VENDOR/updater/update-binary" "$BR_WORK_DIR/META-INF/com/google/android/update-binary"
 fi
 
-if [[ "$AB_OTA_UPDATER" = "true" ]]; then
-	sed -i "s|AB_DEVICE = false|AB_DEVICE = true|g" "$BR_WORK_DIR/META-INF/com/google/android/update-binary"
+if [[ "$AB_OTA" = "true" ]]; then
+	sed -i "s|AB_DEVICE=false|AB_DEVICE=true|g" "$BR_WORK_DIR/META-INF/com/google/android/update-binary"
 fi
 
 
 echo -e "${CLR_BLD_CYA}**** Copying Recovery Image ****${CLR_RST}"
 mkdir -p "$BR_WORK_DIR/TWRP"
 
-if [[ "$AB_OTA_UPDATER" = "true" ]]; then
+if [[ "$AB_OTA" = "true" ]]; then
 	cp "$RECOVERY_RAM" "$PB_WORK_DIR/TWRP/"
 	cp "$PB_VENDOR/updater/magiskboot" "$PB_WORK_DIR"
 else
