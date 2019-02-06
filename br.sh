@@ -113,10 +113,10 @@ echo -e "${CLR_BLD_CYA}**** Copying Recovery Image ****${CLR_RST}"
 mkdir -p "$BR_WORK_DIR/TWRP"
 
 if [[ "$AB_OTA" = "true" ]]; then
-	cp "$RECOVERY_RAM" "$PB_WORK_DIR/TWRP/"
-	cp "$PB_VENDOR/updater/magiskboot" "$PB_WORK_DIR"
+	cp "$RECOVERY_RAM" "$BR_WORK_DIR/TWRP/"
+	cp "$PB_VENDOR/updater/magiskboot" "$BR_WORK_DIR"
 else
-	cp "$RECOVERY_IMG" "$PB_WORK_DIR/TWRP/"
+	cp "$RECOVERY_IMG" "$BR_WORK_DIR/TWRP/"
 fi
 
 echo -e "${CLR_BLD_CYA}- Copying Recovery Image Done...${CLR_RST}"
