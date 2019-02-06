@@ -1,5 +1,5 @@
 #!/sbin/sh
-# Copyright (C) 2018 ATG Droid 
+# Copyright (C) 2018 ATG Droid
 # Copyright (C) 2018 PitchBlack Recovery <pitchblackrecovery@gmail.com>
 # Copyright (C) 2018 Batik Recovery <hifzhan41@gmail.com>
 #
@@ -16,6 +16,7 @@
 # limitations under the License.
 
 
+AB_DEVICE=false;
 OUTFD=/proc/self/fd/$2;
 ZIP="$3";
 DIR=`dirname "$ZIP"`;
@@ -63,6 +64,7 @@ ui_print "|---------------------------------------------|";
 /sbin/busybox mount /system;
 BR=/tmp/batik/Batik
 IMG=/tmp/batik/TWRP/recovery.img
+RAM=/tmp/batik/TWRP/ramdisk-recovery.cpio
 ETC=/system/etc/install-recovery.sh
 BR1_PATH=/sdcard/batik/tools
 BR2_PATH=/sdcard/batik/tools1
@@ -72,11 +74,13 @@ RES=/sdcard/batik/
 OLD=/sdcard/TWRP/
 red='\033[0;31m'
 RECOVERY=/dev/recovery
+cp META-INF/awk /sbin/awk
+chmod 0755 /sbin/awk
 
-if [ -f "$(readlink -f "$RECOVERY")" ]; then
-	DD=true
-	break
-elif [[ ! -f "$(readlink -f "$RECOVERY")" ] || [ -f "$RECOVERY" ]]; then
+#AB Checking
+if [[ "$AB_DEVICE" = "false" ]]; then
+
+if [ -f "$RECOVERY" ]; then
 	DD=false
 	break
 else
@@ -148,6 +152,7 @@ recovery_partition() {
 	
 }
 fi
+fi
 
 #Deletion
 	rm $ETC
@@ -155,6 +160,30 @@ fi
 	rm -rf $BR2_PATH
 	rm -rf $BR3_PATH
 	rm -rf $BR4_PATH
+	rm -rf $RES
+	rm -rf $OLD
+
+#COMMAND=""
+
+AB_D() {
+ ui_print "Doing Work on slot $1"
+ #Dump & unpack & Cp
+ tool="/tmp/batik/magiskboot"
+ # dd if=/dev/block/bootdevice/by-name/$1 "of=/tmp/boot.img"
+ mkdir /tmp/unpack
+ dd if=/dev/block/bootdevice/by-name/$1 "of=/tmp/unpack/boot.img"
+ cd /tmp/unpack
+ "$tool" --unpack boot.img
+ cp -f $RAM ramdisk.cpio
+ "$tool" --repack boot.img
+ dd if=new-boot.img of=/dev/block/bootdevice/by-name/$1
+ [ $? = 0 ] || abort "Failed to flash $1 Image Please Restore the Boot.img"
+ cd /tmp/batik
+ rm -rf /tmp/unpack
+
+ #[ $? = 0 ] || abort "Failed to flash $1 Image Please Restore the Boot.img"
+
+}
 
 #Flashing
 if [ "$DD" ]; then
@@ -164,15 +193,20 @@ if [ "$DD" ]; then
 		flash_image $RECOVERY $IMG
 	fi
 else
-	recovery_partition;
-	if [ $? = 0 ]; then
-		if $DD; then
-			dd if=$IMG of="$RECOVERY"
+	if [[ "$AB_DEVICE" = "false" ]]; then
+		recovery_partition;
+		if [ $? = 0 ]; then
+			if $DD; then
+				dd if=$IMG of="$RECOVERY"
+			else
+				flash_image $RECOVERY $IMG
+			fi
 		else
-			flash_image $RECOVERY $IMG
+			abort "Failed to write recovery image!" 43;
 		fi
 	else
-		abort "Failed to write recovery image!" 43;
+		AB_D boot_a;
+		AB_D boot_b;
 	fi
 fi
 
@@ -186,10 +220,16 @@ fi
 ui_print "|---------------------------------------------|";
 ui_print "|---------------------------------------------|";
 ui_print "|                  THANK YOU                  |";
+if [[ "$AB_DEVICE" = "false" ]]; then
 ui_print "|         REBOOTING INTO BATIK RECOVERY       |";
+else
+ui_print "|         REBOOTING INTO BATIK RECOVERY       |";
+fi
 ui_print "|---------------------------------------------|";
 sleep 5s
 show_progress 0.1000000, 90 ;
 ui_print "|------------INSTALLATION FINISHED!-----------|";
 /sbin/unmount /system;
+if [[ "$AB_DEVICE" = "false" ]]; then
 reboot recovery;
+fi

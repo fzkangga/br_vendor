@@ -46,6 +46,10 @@ BR_VENDOR=vendor/batik
 BR_WORK=$OUT
 BR_WORK_DIR=$OUT/zip
 RECOVERY_IMG=$OUT/recovery.img
+RECOVERY_RAM=$OUT/ramdisk-recovery.cpio
+AB_OTA="false"
+AB_OTA=$AB_OTA_UPDATER
+unset AB_OTA_UPDATER
 BR_DEVICE=$(cut -d'_' -f2-3 <<<$TARGET_PRODUCT)
 
 if [ "$BR_OFFICIAL_CH" != "true" ]; then
@@ -94,14 +98,27 @@ echo -e "${CLR_BLD_GRN}**** Copying Updater Scripts ****${CLR_RST}"
 mkdir -p "$BR_WORK_DIR/META-INF/com/google/android"
 cp -R "$BR_VENDOR/updater/"* "$BR_WORK_DIR/META-INF/com/google/android/"
 if [[ "$PB_FORCE_DD_FLASH" = "true" ]]; then
-	cp -R "$BR_VENDOR/updater/update-binary-dd" "$BR_WORK_DIR/META-INF/com/google/android/"
+	cp -R "$BR_VENDOR/updater/update-binary-dd" "$BR_WORK_DIR/META-INF/com/google/android/update-binary"
 else
 	cp -R "$BR_VENDOR/updater/update-binary" "$BR_WORK_DIR/META-INF/com/google/android/update-binary"
 fi
+cp -R "$BR_VENDOR/updater/awk" "$BR_WORK_DIR/META-INF/"
+
+if [[ "$AB_OTA" = "true" ]]; then
+	sed -i "s|AB_DEVICE=false|AB_DEVICE=true|g" "$BR_WORK_DIR/META-INF/com/google/android/update-binary"
+fi
+
 
 echo -e "${CLR_BLD_CYA}**** Copying Recovery Image ****${CLR_RST}"
 mkdir -p "$BR_WORK_DIR/TWRP"
-cp "$RECOVERY_IMG" "$BR_WORK_DIR/TWRP/"
+
+if [[ "$AB_OTA" = "true" ]]; then
+	cp "$RECOVERY_RAM" "$BR_WORK_DIR/TWRP/"
+	cp "$PB_VENDOR/updater/magiskboot" "$BR_WORK_DIR"
+else
+	cp "$RECOVERY_IMG" "$BR_WORK_DIR/TWRP/"
+fi
+
 echo -e "${CLR_BLD_CYA}- Copying Recovery Image Done...${CLR_RST}"
 echo -e ""
 echo -e "${CLR_BLD_PPL}**** Compressing Files into ZIP ****${CLR_RST}"
@@ -124,7 +141,7 @@ echo -e "${CLR_BLD_CYA} ██║  ██║ ███████╗ ╚██�
 echo -e "${CLR_BLD_YLW} ╚═╝  ╚═╝ ╚══════╝  ╚═════╝  ╚═════╝    ╚═══╝   ╚══════╝ ╚═╝  ╚═╝    ╚═╝    ${CLR_RST}"
 echo -e ""
 BUILD_END=$(date +"%s")
-DIFF=$(($BUILD_END - $BUILD_START))
+#DIFF=$(($BUILD_END - $BUILD_START + ( ($HOURS * 60) + ($MINS * 60) + $SECS)))
 if [[ "${BUILD_RESULT_STRING}" = "BUILD SUCCESSFUL" ]]; then
 mv ${BR_WORK_DIR}/${ZIP_NAME}.zip ${BR_WORK_DIR}/../${ZIP_NAME}.zip
 echo -e "${CLR_BLD_CYA}****************************************************************************************${CLR_RST}"
