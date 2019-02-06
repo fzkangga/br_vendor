@@ -97,7 +97,7 @@ echo -e ""
 echo -e "${CLR_BLD_GRN}**** Copying Updater Scripts ****${CLR_RST}"
 mkdir -p "$BR_WORK_DIR/META-INF/com/google/android"
 cp -R "$BR_VENDOR/updater/"* "$BR_WORK_DIR/META-INF/com/google/android/"
-if [[ "$PB_FORCE_DD_FLASH" = "true" ]]; then
+if [[ "$BR_FORCE_DD_FLASH" = "true" ]]; then
 	cp -R "$BR_VENDOR/updater/update-binary-dd" "$BR_WORK_DIR/META-INF/com/google/android/update-binary"
 else
 	cp -R "$BR_VENDOR/updater/update-binary" "$BR_WORK_DIR/META-INF/com/google/android/update-binary"
@@ -114,7 +114,7 @@ mkdir -p "$BR_WORK_DIR/TWRP"
 
 if [[ "$AB_OTA" = "true" ]]; then
 	cp "$RECOVERY_RAM" "$BR_WORK_DIR/TWRP/"
-	cp "$PB_VENDOR/updater/magiskboot" "$BR_WORK_DIR"
+	cp "$BR_VENDOR/updater/magiskboot" "$BR_WORK_DIR"
 else
 	cp "$RECOVERY_IMG" "$BR_WORK_DIR/TWRP/"
 fi
