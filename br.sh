@@ -41,7 +41,7 @@ CLR_BLD_CYA=$CLR_RST$CLR_BLD$(tput setaf 6) #  cyan, bold
 
 BUILD_START=$(date +"%s")
 DATE=$(date -u +%Y%m%d-%H%M)
-VERSION=S-1.4.2
+VERSION=S-1.4.5
 BR_VENDOR=vendor/batik
 BR_WORK=$OUT
 BR_WORK_DIR=$OUT/zip
