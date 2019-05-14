@@ -41,114 +41,60 @@ CLR_BLD_CYA=$CLR_RST$CLR_BLD$(tput setaf 6) #  cyan, bold
 
 BUILD_START=$(date +"%s")
 DATE=$(date -u +%Y%m%d-%H%M)
-VERSION=S-1.4.5
-BR_VENDOR=vendor/batik
-BR_WORK=$OUT
-BR_WORK_DIR=$OUT/zip
+VERSION=3.3.0
+TWRP_VENDOR=vendor/twrp
+TWRP_WORK=$OUT
+TWRP_WORK_DIR=$OUT/zip
 RECOVERY_IMG=$OUT/recovery.img
 RECOVERY_RAM=$OUT/ramdisk-recovery.cpio
-AB_OTA="false"
-AB_OTA=$AB_OTA_UPDATER
-unset AB_OTA_UPDATER
-BR_DEVICE=$(cut -d'_' -f2-3 <<<$TARGET_PRODUCT)
+TWRP_DEVICE=$(cut -d'_' -f2-3 <<<$TARGET_PRODUCT)
 
-if [ "$BR_OFFICIAL_CH" != "true" ]; then
-	BR_BUILD_TYPE=UNOFFICIAL
+if [ "$TWRP_OFFICIAL_CH" != "true" ]; then
+	TWRP_BUILD_TYPE=UNOFFICIAL
 else
-	BR_BUILD_TYPE=OFFICIAL
+	TWRP_BUILD_TYPE=OFFICIAL
 fi
 
-function search() {
-for d in $(curl -s https://raw.githubusercontent.com/BatikRecovery/br_vendor/br/br.devices); do
-if [ "$d" == "$BR_DEVICE" ]; then
-echo "$d";
-break;
-fi
-done
-}
-
-if [ "$BR_BUILD_TYPE" != "UNOFFICIAL" ]; then
-	F=$(search);
-	if [[ "${F}" ]]; then
-		BR_BUILD_TYPE=OFFICIAL
-	else
-		BR_BUILD_TYPE=UNOFFICIAL
-		echo -e "${red}Error Device is not OFFICIAL${nocol}"
-		exit 1;
-	fi
-fi
-
-ZIP_NAME=BR-$BR_DEVICE-$VERSION-$DATE-$BR_BUILD_TYPE
+ZIP_NAME=TWRP-$TWRP_DEVICE-$VERSION-$DATE-$TWRP_BUILD_TYPE
 
 echo -e "${CLR_BLD_RED}**** Making Zip ****${CLR_RST}"
-if [ -d "$BR_WORK_DIR" ]; then
-        rm -rf "$BR_WORK_DIR"
-	rm -rf "$BR_WORK"/*.zip
+if [ -d "$TWRP_WORK_DIR" ]; then
+        rm -rf "$TWRP_WORK_DIR"
+	rm -rf "$TWRP_WORK"/*.zip
 fi
 
-if [ ! -d "BR_WORK_DIR" ]; then
-        mkdir "$BR_WORK_DIR"
+if [ ! -d "TWRP_WORK_DIR" ]; then
+        mkdir "$TWRP_WORK_DIR"
 fi
 
-echo -e "${CLR_BLD_BLU}**** Copying Tools ****${CLR_RST}"
-cp -R "$BR_VENDOR/Batik" "$BR_WORK_DIR"
-echo -e "${CLR_BLD_BLU}- Copying Tools Done...${CLR_RST}"
-echo -e ""
 echo -e "${CLR_BLD_GRN}**** Copying Updater Scripts ****${CLR_RST}"
-mkdir -p "$BR_WORK_DIR/META-INF/com/google/android"
-cp -R "$BR_VENDOR/updater/"* "$BR_WORK_DIR/META-INF/com/google/android/"
-if [[ "$BR_FORCE_DD_FLASH" = "true" ]]; then
-	cp -R "$BR_VENDOR/updater/update-binary-dd" "$BR_WORK_DIR/META-INF/com/google/android/update-binary"
-else
-	cp -R "$BR_VENDOR/updater/update-binary" "$BR_WORK_DIR/META-INF/com/google/android/update-binary"
-fi
-cp -R "$BR_VENDOR/updater/awk" "$BR_WORK_DIR/META-INF/"
-
-if [[ "$AB_OTA" = "true" ]]; then
-	sed -i "s|AB_DEVICE=false|AB_DEVICE=true|g" "$BR_WORK_DIR/META-INF/com/google/android/update-binary"
-fi
+mkdir -p "$TWRP_WORK_DIR/META-INF/com/google/android"
+cp -R "$TWRP_VENDOR/updater/"* "$TWRP_WORK_DIR/META-INF/com/google/android/"
+cp -R "$TWRP_VENDOR/updater/update-binary" "$TWRP_WORK_DIR/META-INF/com/google/android/update-binary"
 
 
 echo -e "${CLR_BLD_CYA}**** Copying Recovery Image ****${CLR_RST}"
-mkdir -p "$BR_WORK_DIR/TWRP"
+mkdir -p "$TWRP_WORK_DIR/TWRP"
 
-if [[ "$AB_OTA" = "true" ]]; then
-	cp "$RECOVERY_RAM" "$BR_WORK_DIR/TWRP/"
-	cp "$BR_VENDOR/updater/magiskboot" "$BR_WORK_DIR"
-else
-	cp "$RECOVERY_IMG" "$BR_WORK_DIR/TWRP/"
-fi
+cp "$RECOVERY_IMG" "$TWRP_WORK_DIR/TWRP/"
 
 echo -e "${CLR_BLD_CYA}- Copying Recovery Image Done...${CLR_RST}"
 echo -e ""
 echo -e "${CLR_BLD_PPL}**** Compressing Files into ZIP ****${CLR_RST}"
-cd $BR_WORK_DIR
+cd $TWRP_WORK_DIR
 zip -r ${ZIP_NAME}.zip *
 BUILD_RESULT_STRING="BUILD SUCCESSFUL"
 echo -e "${CLR_BLD_PPL}- Compressing Zip Done...${CLR_RST}"
 echo -e ""
-echo -e "${CLR_BLD_YLW}		██████╗   █████╗  ████████╗ ██╗ ██╗  ██╗${CLR_RST}" 
-echo -e "${CLR_BLD_CYA}		██╔══██╗ ██╔══██╗ ╚══██╔══╝ ██║ ██║ ██╔╝${CLR_RST}" 
-echo -e "${CLR_BLD_PPL}		██████╔╝ ███████║    ██║    ██║ █████╔╝ ${CLR_RST}" 
-echo -e "${CLR_BLD_GRN}		██╔══██╗ ██╔══██║    ██║    ██║ ██╔═██╗ ${CLR_RST}" 
-echo -e "${CLR_BLD_BLU}		██████╔╝ ██║  ██║    ██║    ██║ ██║  ██╗ ${CLR_RST}"
-echo -e "${CLR_BLD_RED}		╚═════╝  ╚═╝  ╚═╝    ╚═╝    ╚═╝ ╚═╝  ╚═╝ ${CLR_RST}"
-echo -e "${CLR_BLD_RED} ██████╗  ███████╗  ██████╗  ██████╗  ██╗   ██╗ ███████╗ ██████╗  ██╗   ██╗ ${CLR_RST}"
-echo -e "${CLR_BLD_BLU} ██╔══██╗ ██╔════╝ ██╔════╝ ██╔═══██╗ ██║   ██║ ██╔════╝ ██╔══██╗ ╚██╗ ██╔╝ ${CLR_RST}"
-echo -e "${CLR_BLD_GRN} ██████╔╝ █████╗   ██║      ██║   ██║ ██║   ██║ █████╗   ██████╔╝  ╚████╔╝  ${CLR_RST}"
-echo -e "${CLR_BLD_PPL} ██╔══██╗ ██╔══╝   ██║      ██║   ██║ ╚██╗ ██╔╝ ██╔══╝   ██╔══██╗   ╚██╔╝   ${CLR_RST}"
-echo -e "${CLR_BLD_CYA} ██║  ██║ ███████╗ ╚██████╗ ╚██████╔╝  ╚████╔╝  ███████╗ ██║  ██║    ██║    ${CLR_RST}"
-echo -e "${CLR_BLD_YLW} ╚═╝  ╚═╝ ╚══════╝  ╚═════╝  ╚═════╝    ╚═══╝   ╚══════╝ ╚═╝  ╚═╝    ╚═╝    ${CLR_RST}"
-echo -e ""
 BUILD_END=$(date +"%s")
 #DIFF=$(($BUILD_END - $BUILD_START + ( ($HOURS * 60) + ($MINS * 60) + $SECS)))
 if [[ "${BUILD_RESULT_STRING}" = "BUILD SUCCESSFUL" ]]; then
-mv ${BR_WORK_DIR}/${ZIP_NAME}.zip ${BR_WORK_DIR}/../${ZIP_NAME}.zip
+mv ${TWRP_WORK_DIR}/${ZIP_NAME}.zip ${TWRP_WORK_DIR}/../${ZIP_NAME}.zip
 echo -e "${CLR_BLD_CYA}****************************************************************************************${CLR_RST}"
 echo -e "${CLR_BLD_RED}*${CLR_RST}${CLR_BLD_RED} ${BUILD_RESULT_STRING}${CLR_RST}"
 echo -e "${CLR_BLD_GRN}*${CLR_RST}${CLR_BLD_GRN} RECOVERY LOCATION: ${OUT}/recovery.img${CLR_RST}"
 echo -e "${CLR_BLD_YLW}*${CLR_RST}${CLR_BLD_YLW} RECOVERY SIZE: $( du -h ${OUT}/recovery.img | awk '{print $1}' )${CLR_RST}"
-echo -e "${CLR_BLD_PPL}*${CLR_RST}${CLR_BLD_PPL} ZIP LOCATION: ${BR_WORK}/${ZIP_NAME}.zip${CLR_RST}"
-echo -e "${CLR_BLD_RED}*${CLR_RST}${CLR_BLD_RED} ZIP SIZE: $( du -h ${BR_WORK}/${ZIP_NAME}.zip | awk '{print $1}' )${CLR_RST}"
+echo -e "${CLR_BLD_PPL}*${CLR_RST}${CLR_BLD_PPL} ZIP LOCATION: ${TWRP_WORK}/${ZIP_NAME}.zip${CLR_RST}"
+echo -e "${CLR_BLD_RED}*${CLR_RST}${CLR_BLD_RED} ZIP SIZE: $( du -h ${TWRP_WORK}/${ZIP_NAME}.zip | awk '{print $1}' )${CLR_RST}"
 echo -e "${CLR_BLD_CYA}****************************************************************************************${CLR_RST}"
 fi

@@ -20,6 +20,8 @@ AB_DEVICE=false;
 OUTFD=/proc/self/fd/$2;
 ZIP="$3";
 DIR=`dirname "$ZIP"`;
+PX=/tmp/zip
+IMG=/tmp/zip/TWRP/recovery.img
 
 ui_print() {
   until [ ! "$1" ]; do
@@ -29,54 +31,26 @@ ui_print() {
 }
 
 show_progress() { echo "progress $1 $2" > /proc/self/fd/$2; }
-set_perm_recursive() {
-  dirs=$(echo $* | awk '{ print substr($0, index($0,$5)) }');
-  for i in $dirs; do
-    chown -R $1.$2 $i; chown -R $1:$2 $i;
-    find "$i" -type d -exec chmod $3 {} +;
-    find "$i" -type f -exec chmod $4 {} +;
-  done;
-}
 file_getprop() { grep "^$2" "$1" | cut -d= -f2; }
 getprop() { test -e /sbin/getprop && /sbin/getprop $1 || file_getprop /default.prop $1; }
 abort() { ui_print "$*"; exit 1; }
 
-if [ -f "/tmp/batik" ]; then
-rm -rf "/tmp/batik"
-fi
-
-mkdir -p /tmp/batik;
-cd /tmp/batik;
+mkdir -p $PX;
+cd $PX;
 unzip -o "$ZIP";
 show_progress 0.1000000, 0;
 ui_print "|---------------------------------------------|";
-ui_print "|-          ____        _   _ _              -|";
-ui_print "|-         | __ )  __ _| |_(_) | __          -|";
-ui_print "|-         |  _ \ / _' | __| | |/ /          -|";
-ui_print "|-         | |_) | (_| | |_| |   <           -|";
-ui_print "|-  ____   |____/ \__,_|\__|_|_|\_\          -|";
-ui_print "|- |  _ \ ___  ___ _____   _____ _ __ _   _  -|";
-ui_print "|- | |_) / _ \/ __/ _ \ \ / / _ \ '__| | | | -|";
-ui_print "|- |  _ <  __/ (_| (_) \ V /  __/ |  | |_| | -|";
-ui_print "|- |_| \_\___|\___\___/ \_/ \___|_|   \__, | -|";
-ui_print "|-                                    |___/  -|";
 ui_print "|---------------------------------------------|";
-/sbin/mount /system;
-BR=/tmp/batik/Batik
-IMG=/tmp/batik/TWRP/recovery.img
-RAM=/tmp/batik/TWRP/ramdisk-recovery.cpio
-ETC=/system/etc/install-recovery.sh
-BR1_PATH=/sdcard/batik/tools
-BR2_PATH=/sdcard/batik/tools1
-BR3_PATH=/sdcard/batik/tools2
-BR4_PATH=/sdcard/TWRP/tools
-RES=/sdcard/batik/
-OLD=/sdcard/TWRP/
-red='\033[0;31m'
-RECOVERY=/dev/recovery
-cp META-INF/awk /sbin/awk
-chmod 0755 /sbin/awk
-
+ui_print "|-         _______       _____ ____          -|";
+ui_print "|-        |__   __|     |  _  \  _ \         -|";
+ui_print "|-           | |\  /\  /|    _/  __/         -|";
+ui_print "|-           | | \/  \/ | |\ \| |            -|";
+ui_print "|-           |_|\__/\__/|_| \_\_|            -|";
+ui_print "|-                                           -|";
+ui_print "|---------------------------------------------|";
+ui_print "|---------------------------------------------|";
+ui_print "|                                             |";
+ui_print "|              Flashing Recovery              |";
 #AB Checking
 if [[ "$AB_DEVICE" = "false" ]]; then
 
@@ -154,15 +128,6 @@ recovery_partition() {
 fi
 fi
 
-#Deletion
-	rm $ETC
-	rm -rf $BR1_PATH
-	rm -rf $BR2_PATH
-	rm -rf $BR3_PATH
-	rm -rf $BR4_PATH
-	rm -rf $RES
-	rm -rf $OLD
-
 #COMMAND=""
 
 AB_D() {
@@ -210,26 +175,22 @@ else
 	fi
 fi
 
-#Copy Specific Files
-if [ -f "/sdcard/batik" ]; then
-cp -r $BR/tools /sdcard/batik/
-else
-mkdir -p /sdcard/batik
-cp -r $BR/tools /sdcard/batik/
-fi
+rm -rf $PX
+
+ui_print "|                                             |";
 ui_print "|---------------------------------------------|";
 ui_print "|---------------------------------------------|";
 ui_print "|                  THANK YOU                  |";
 if [[ "$AB_DEVICE" = "false" ]]; then
-ui_print "|         REBOOTING INTO BATIK RECOVERY       |";
+ui_print "|           REBOOTING INTO RECOVERY           |";
 else
-ui_print "|         REBOOTING INTO BATIK RECOVERY       |";
+ui_print "|           REBOOTING INTO RECOVERY           |";
 fi
+ui_print "|---------------------------------------------|";
 ui_print "|---------------------------------------------|";
 sleep 5s
 show_progress 0.1000000, 90 ;
 ui_print "|------------INSTALLATION FINISHED!-----------|";
-/sbin/unmount /system;
 if [[ "$AB_DEVICE" = "false" ]]; then
 reboot recovery;
 fi
