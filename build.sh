@@ -46,7 +46,6 @@ SHRP_VENDOR=vendor/recovery
 SHRP_WORK=$OUT
 SHRP_WORK_DIR=$OUT/zip
 SHRP_EPICX=$SHRP_VENDOR/SHRP/epicx
-SHRP_COOKIES=$SHRP_VENDOR/SHRP/cookies
 RECOVERY_IMG=$OUT/recovery.img
 RECOVERY_RAM=$OUT/ramdisk-recovery.cpio
 SHRP_DEVICE=$(cut -d'_' -f2-3 <<<$TARGET_PRODUCT)
@@ -79,7 +78,6 @@ echo -e "${CLR_BLD_CYA}**** Copying Tools and Recovery Image ****${CLR_RST}"
 mkdir -p "$SHRP_WORK_DIR/TWRP"
 
 cp -R "$SHRP_EPICX" "$SHRP_WORK_DIR/TWRP/"
-cp -R "$SHRP_COOKIES" "$SHRP_WORK_DIR/TWRP/"
 cp "$RECOVERY_IMG" "$SHRP_WORK_DIR/TWRP/epicx/"
 
 echo -e "${CLR_BLD_CYA}- Copying Recovery Image Done...${CLR_RST}"
